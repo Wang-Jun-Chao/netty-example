@@ -13,16 +13,24 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.localecho;
+package wjc.netty.objectecho;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
-public class LocalEchoServerHandler extends ChannelInboundHandlerAdapter {
+/**
+ * Handles both client-side and server-side handler depending on which
+ * constructor was called.
+ */
+public class ObjectEchoServerHandler extends ChannelInboundHandlerAdapter {
+    private final static ObjectMapper MAPPER = new ObjectMapper();
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        // Write back as received
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws JsonProcessingException {
+        // Echo back the received object to the client.
+        System.out.println(MAPPER.writeValueAsString(msg));
         ctx.write(msg);
     }
 
