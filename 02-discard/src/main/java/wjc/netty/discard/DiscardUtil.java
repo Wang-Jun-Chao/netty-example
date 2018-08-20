@@ -1,10 +1,8 @@
-package io.netty.example.discard;
+package wjc.netty.discard;
 
 import io.netty.buffer.ByteBuf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Arrays;
 
 /**
  * @Author: wangjunchao(王俊超)

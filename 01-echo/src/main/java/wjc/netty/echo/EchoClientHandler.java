@@ -13,30 +13,51 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.echo;
+package wjc.netty.echo;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandler.Sharable;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
 /**
- * Handler implementation for the echo server.
+ * Handler implementation for the echo client.  It initiates the ping-pong
+ * traffic between the echo client and server by sending the first message to
+ * the server.
  */
-@Sharable
-public class EchoServerHandler extends ChannelInboundHandlerAdapter {
+public class EchoClientHandler extends ChannelInboundHandlerAdapter {
+
+    private final ByteBuf firstMessage;
+    private final static String S = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+    /**
+     * Creates a client-side handler.
+     */
+    public EchoClientHandler() {
+        firstMessage = Unpooled.buffer(EchoClient.SIZE);
+        for (int i = 0; i < firstMessage.capacity(); i++) {
+            firstMessage.writeByte((byte)(S.charAt((int) (Math.random()*S.length()))));
+        }
+    }
+
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) {
+        EchoUtil.printMessage(firstMessage, "Client begin to write message: ");
+        ctx.writeAndFlush(firstMessage);
+    }
+
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         if (msg instanceof ByteBuf) {
-            EchoUtil.printMessage((ByteBuf) msg, "Server receive: ");
+            EchoUtil.printMessage((ByteBuf) msg, "Client read message: ");
         }
         ctx.write(msg);
     }
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
-        System.out.println("Server read complete");
+        System.out.println("Client read complete");
         ctx.flush();
     }
 

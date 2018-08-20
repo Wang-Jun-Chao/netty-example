@@ -1,4 +1,4 @@
-package io.netty.example.echo;
+package wjc.netty.echo;
 
 import io.netty.buffer.ByteBuf;
 import org.slf4j.Logger;
@@ -16,6 +16,6 @@ public class EchoUtil {
         ByteBuf buf = byteBuf.duplicate();
         byte[] bytes = new byte[buf.readableBytes()];
         buf.readBytes(bytes);
-        System.out.println(message + Arrays.toString(bytes));
+        System.out.println(message + new String(bytes));
     }
 }

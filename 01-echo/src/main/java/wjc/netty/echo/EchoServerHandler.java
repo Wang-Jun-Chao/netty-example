@@ -13,24 +13,31 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.discard;
+package wjc.netty.echo;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 
 /**
- * Handles a server-side channel.
+ * Handler implementation for the echo server.
  */
-public class DiscardServerHandler extends SimpleChannelInboundHandler<Object> {
-//    private final static ObjectMap
+@Sharable
+public class EchoServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
-    public void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
         if (msg instanceof ByteBuf) {
-            DiscardUtil.printMessage((ByteBuf) msg, "Server receive: ");
+            EchoUtil.printMessage((ByteBuf) msg, "Server receive: ");
         }
-        // discard
+        ctx.write(msg);
+    }
+
+    @Override
+    public void channelReadComplete(ChannelHandlerContext ctx) {
+        System.out.println("Server read complete");
+        ctx.flush();
     }
 
     @Override

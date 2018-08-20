@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.discard;
+package wjc.netty.discard;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
@@ -34,7 +34,6 @@ public class DiscardClientHandler extends SimpleChannelInboundHandler<Object> {
         this.ctx = ctx;
 
         // Initialize the message.
-//        content = ctx.alloc().directBuffer(DiscardClient.SIZE).writeZero(DiscardClient.SIZE);
         content = ctx.alloc().directBuffer(DiscardClient.SIZE).writeBytes("Hello".getBytes());
 
         // Send the initial messages.
@@ -49,6 +48,7 @@ public class DiscardClientHandler extends SimpleChannelInboundHandler<Object> {
     @Override
     public void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
         // Server is supposed to send nothing, but if it sends something, discard it.
+        DiscardUtil.printMessage((ByteBuf) msg, "Client Receive");
     }
 
     @Override
@@ -67,7 +67,6 @@ public class DiscardClientHandler extends SimpleChannelInboundHandler<Object> {
     }
 
     private final ChannelFutureListener trafficGenerator = new ChannelFutureListener() {
-        @Override
         public void operationComplete(ChannelFuture future) {
             if (future.isSuccess()) {
                 generateTraffic();
