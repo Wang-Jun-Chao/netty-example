@@ -340,10 +340,10 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
     }
 
     /**
-     * Sets the Date header for the HTTP response
+     * Sets the Date header for the HTTP cors
      *
      * @param response
-     *            HTTP response
+     *            HTTP cors
      */
     private static void setDateHeader(FullHttpResponse response) {
         SimpleDateFormat dateFormatter = new SimpleDateFormat(HTTP_DATE_FORMAT, Locale.US);
@@ -357,7 +357,7 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
      * Sets the Date and Cache headers for the HTTP Response
      *
      * @param response
-     *            HTTP response
+     *            HTTP cors
      * @param fileToCache
      *            file to extract content type
      */
@@ -381,7 +381,7 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
      * Sets the content type header for the HTTP Response
      *
      * @param response
-     *            HTTP response
+     *            HTTP cors
      * @param file
      *            file to extract content type
      */

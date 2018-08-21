@@ -91,7 +91,7 @@ public final class SpdyClient {
             // Send the GET request.
             channel.writeAndFlush(request).sync();
 
-            // Waits for the complete HTTP response
+            // Waits for the complete HTTP cors
             httpResponseHandler.queue().take().sync();
             System.out.println("Finished SPDY HTTP GET");
 

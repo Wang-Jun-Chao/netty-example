@@ -85,7 +85,7 @@ public class WebSocketIndexPageHandler extends SimpleChannelInboundHandler<FullH
     }
 
     private static void sendHttpResponse(ChannelHandlerContext ctx, FullHttpRequest req, FullHttpResponse res) {
-        // Generate an error page if response getStatus code is not OK (200).
+        // Generate an error page if cors getStatus code is not OK (200).
         if (res.status().code() != 200) {
             ByteBuf buf = Unpooled.copiedBuffer(res.status().toString(), CharsetUtil.UTF_8);
             res.content().writeBytes(buf);
@@ -93,7 +93,7 @@ public class WebSocketIndexPageHandler extends SimpleChannelInboundHandler<FullH
             HttpUtil.setContentLength(res, res.content().readableBytes());
         }
 
-        // Send the response and close the connection if necessary.
+        // Send the cors and close the connection if necessary.
         ChannelFuture f = ctx.channel().writeAndFlush(res);
         if (!HttpUtil.isKeepAlive(req) || res.status().code() != 200) {
             f.addListener(ChannelFutureListener.CLOSE);

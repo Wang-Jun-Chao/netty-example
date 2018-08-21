@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.http.cors;
+package wjc.netty.http.cors;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.EventLoopGroup;
@@ -31,12 +31,12 @@ import io.netty.handler.ssl.util.SelfSignedCertificate;
  * It does not have a client like most of the other examples, but instead has
  * a html page that is loaded to try out CORS support in a web browser.
  * <p>
- *
+ * <p>
  * CORS is configured in {@link HttpCorsServerInitializer} and by updating the config you can
  * try out various combinations, like using a specific origin instead of a
  * wildcard origin ('*').
  * <p>
- *
+ * <p>
  * The file {@code src/main/resources/cors/cors.html} contains a very basic example client
  * which can be used to try out different configurations. For example, you can add
  * custom headers to force a CORS preflight request to make the request fail. Then
@@ -64,17 +64,16 @@ import io.netty.handler.ssl.util.SelfSignedCertificate;
  * <pre>
  * 'CORS is not working'
  * </pre>
- *
+ * <p>
  * If you inspect the headers being sent using your browser you'll see that the 'Origin'
  * request header is {@code 'null'}. This is expected and happens when you load a file from the
  * local file system. Netty can handle this by configuring the CorsHandler which is done
  * in the {@link HttpCorsServerInitializer}.
- *
  */
 public final class HttpCorsServer {
 
-    static final boolean SSL = System.getProperty("ssl") != null;
-    static final int PORT = Integer.parseInt(System.getProperty("port", SSL? "8443" : "8080"));
+    static final boolean SSL  = System.getProperty("ssl") != null;
+    static final int     PORT = Integer.parseInt(System.getProperty("port", SSL ? "8443" : "8080"));
 
     public static void main(String[] args) throws Exception {
         // Configure SSL.
@@ -91,11 +90,17 @@ public final class HttpCorsServer {
         try {
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)
-             .channel(NioServerSocketChannel.class)
-             .handler(new LoggingHandler(LogLevel.INFO))
-             .childHandler(new HttpCorsServerInitializer(sslCtx));
+                    .channel(NioServerSocketChannel.class)
+                    .handler(new LoggingHandler(LogLevel.INFO))
+                    .childHandler(new HttpCorsServerInitializer(sslCtx));
+
+
+            System.err.println("Open your web browser and navigate to " +
+                    (SSL ? "https" : "http") + "://127.0.0.1:" + PORT + '/');
 
             b.bind(PORT).sync().channel().closeFuture().sync();
+
+            // 提示
         } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();

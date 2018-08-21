@@ -52,7 +52,7 @@ public final class OcspUtils {
 
     private static final String OCSP_REQUEST_TYPE = "application/ocsp-request";
 
-    private static final String OCSP_RESPONSE_TYPE = "application/ocsp-response";
+    private static final String OCSP_RESPONSE_TYPE = "application/ocsp-cors";
 
     private OcspUtils() {
     }
@@ -110,7 +110,7 @@ public final class OcspUtils {
     }
 
     /**
-     * TODO: This is a very crude and non-scalable HTTP client to fetch the OCSP response from the
+     * TODO: This is a very crude and non-scalable HTTP client to fetch the OCSP cors from the
      * CA's OCSP responder server. It's meant to demonstrate the basic building blocks on how to
      * interact with the responder server and you should consider using Netty's HTTP client instead.
      */

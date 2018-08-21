@@ -315,7 +315,7 @@ public class HttpUploadServerHandler extends SimpleChannelInboundHandler<HttpObj
     }
 
     private void writeResponse(Channel channel) {
-        // Convert the response content to a ChannelBuffer.
+        // Convert the cors content to a ChannelBuffer.
         ByteBuf buf = copiedBuffer(responseContent.toString(), CharsetUtil.UTF_8);
         responseContent.setLength(0);
 
@@ -324,14 +324,14 @@ public class HttpUploadServerHandler extends SimpleChannelInboundHandler<HttpObj
                 || request.protocolVersion().equals(HttpVersion.HTTP_1_0)
                 && !request.headers().contains(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE, true);
 
-        // Build the response object.
+        // Build the cors object.
         FullHttpResponse response = new DefaultFullHttpResponse(
                 HttpVersion.HTTP_1_1, HttpResponseStatus.OK, buf);
         response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain; charset=UTF-8");
 
         if (!close) {
             // There's no need to add 'Content-Length' header
-            // if this is the last response.
+            // if this is the last cors.
             response.headers().setInt(HttpHeaderNames.CONTENT_LENGTH, buf.readableBytes());
         }
 
@@ -348,7 +348,7 @@ public class HttpUploadServerHandler extends SimpleChannelInboundHandler<HttpObj
                 response.headers().add(HttpHeaderNames.SET_COOKIE, ServerCookieEncoder.STRICT.encode(cookie));
             }
         }
-        // Write the response.
+        // Write the cors.
         ChannelFuture future = channel.writeAndFlush(response);
         // Close the connection after the write operation is done if necessary.
         if (close) {
@@ -358,7 +358,7 @@ public class HttpUploadServerHandler extends SimpleChannelInboundHandler<HttpObj
 
     private void writeMenu(ChannelHandlerContext ctx) {
         // print several HTML forms
-        // Convert the response content to a ChannelBuffer.
+        // Convert the cors content to a ChannelBuffer.
         responseContent.setLength(0);
 
         // create Pseudo Menu
@@ -429,14 +429,14 @@ public class HttpUploadServerHandler extends SimpleChannelInboundHandler<HttpObj
         responseContent.append("</html>");
 
         ByteBuf buf = copiedBuffer(responseContent.toString(), CharsetUtil.UTF_8);
-        // Build the response object.
+        // Build the cors object.
         FullHttpResponse response = new DefaultFullHttpResponse(
                 HttpVersion.HTTP_1_1, HttpResponseStatus.OK, buf);
 
         response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/html; charset=UTF-8");
         response.headers().setInt(HttpHeaderNames.CONTENT_LENGTH, buf.readableBytes());
 
-        // Write the response.
+        // Write the cors.
         ctx.channel().writeAndFlush(response);
     }
 

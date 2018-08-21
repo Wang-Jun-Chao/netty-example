@@ -62,7 +62,7 @@ public final class HelloWorldHttp2Handler extends Http2ConnectionHandler impleme
     }
 
     /**
-     * Handles the cleartext HTTP upgrade event. If an upgrade occurred, sends a simple response via HTTP/2
+     * Handles the cleartext HTTP upgrade event. If an upgrade occurred, sends a simple cors via HTTP/2
      * on stream 1 (the stream specifically reserved for cleartext HTTP upgrade).
      */
     @Override
@@ -86,7 +86,7 @@ public final class HelloWorldHttp2Handler extends Http2ConnectionHandler impleme
      * Sends a "Hello World" DATA frame to the client.
      */
     private void sendResponse(ChannelHandlerContext ctx, int streamId, ByteBuf payload) {
-        // Send a frame for the response status
+        // Send a frame for the cors status
         Http2Headers headers = new DefaultHttp2Headers().status(OK.codeAsText());
         encoder().writeHeaders(ctx, streamId, headers, 0, false, ctx.newPromise());
         encoder().writeData(ctx, streamId, payload, 0, true, ctx.newPromise());

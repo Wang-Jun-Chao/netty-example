@@ -54,7 +54,7 @@ public final class QuoteOfTheMomentClient {
                     SocketUtils.socketAddress("255.255.255.255", PORT))).sync();
 
             // QuoteOfTheMomentClientHandler will close the DatagramChannel when a
-            // response is received.  If the channel is not closed within 5 seconds,
+            // cors is received.  If the channel is not closed within 5 seconds,
             // print an error message and quit.
             if (!ch.closeFuture().await(5000)) {
                 System.err.println("QOTM request timed out.");

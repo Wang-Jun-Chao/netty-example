@@ -44,9 +44,9 @@ public class HttpResponseHandler extends SimpleChannelInboundHandler<FullHttpRes
     }
 
     /**
-     * Create an association between an anticipated response stream id and a {@link ChannelPromise}
+     * Create an association between an anticipated cors stream id and a {@link ChannelPromise}
      *
-     * @param streamId The stream for which a response is expected
+     * @param streamId The stream for which a cors is expected
      * @param writeFuture A future that represent the request write operation
      * @param promise The promise object that will be used to wait/notify events
      * @return The previous object associated with {@code streamId}
@@ -57,9 +57,9 @@ public class HttpResponseHandler extends SimpleChannelInboundHandler<FullHttpRes
     }
 
     /**
-     * Wait (sequentially) for a time duration for each anticipated response
+     * Wait (sequentially) for a time duration for each anticipated cors
      *
-     * @param timeout Value of time to wait for each response
+     * @param timeout Value of time to wait for each cors
      * @param unit Units associated with {@code timeout}
      * @see HttpResponseHandler#put(int, ChannelFuture, ChannelPromise)
      */
@@ -76,7 +76,7 @@ public class HttpResponseHandler extends SimpleChannelInboundHandler<FullHttpRes
             }
             ChannelPromise promise = entry.getValue().getValue();
             if (!promise.awaitUninterruptibly(timeout, unit)) {
-                throw new IllegalStateException("Timed out waiting for response on stream id " + entry.getKey());
+                throw new IllegalStateException("Timed out waiting for cors on stream id " + entry.getKey());
             }
             if (!promise.isSuccess()) {
                 throw new RuntimeException(promise.cause());

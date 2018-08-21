@@ -62,13 +62,13 @@ public final class WorldClockClient {
             // Get the handler instance to initiate the request.
             WorldClockClientHandler handler = ch.pipeline().get(WorldClockClientHandler.class);
 
-            // Request and get the response.
+            // Request and get the cors.
             List<String> response = handler.getLocalTimes(CITIES);
 
             // Close the connection.
             ch.close();
 
-            // Print the response at last but not least.
+            // Print the cors at last but not least.
             for (int i = 0; i < CITIES.size(); i ++) {
                 System.out.format("%28s: %s%n", CITIES.get(i), response.get(i));
             }

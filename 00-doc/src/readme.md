@@ -1,0 +1,1 @@
+HttpObjectAggregator会把多个消息转换为一个单一的FullHttpRequest或是FullHttpResponse。

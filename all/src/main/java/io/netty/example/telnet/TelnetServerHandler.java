@@ -40,7 +40,7 @@ public class TelnetServerHandler extends SimpleChannelInboundHandler<String> {
 
     @Override
     public void channelRead0(ChannelHandlerContext ctx, String request) throws Exception {
-        // Generate and write a response.
+        // Generate and write a cors.
         String response;
         boolean close = false;
         if (request.isEmpty()) {

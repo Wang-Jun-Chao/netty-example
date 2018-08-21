@@ -48,7 +48,7 @@ import static io.netty.handler.codec.http.HttpVersion.*;
 public class HttpSnoopServerHandler extends SimpleChannelInboundHandler<Object> {
 
     private HttpRequest request;
-    /** Buffer that stores the response content */
+    /** Buffer that stores the cors content */
     private final StringBuilder buf = new StringBuilder();
 
     @Override
@@ -147,7 +147,7 @@ public class HttpSnoopServerHandler extends SimpleChannelInboundHandler<Object> 
     private boolean writeResponse(HttpObject currentObj, ChannelHandlerContext ctx) {
         // Decide whether to close the connection or not.
         boolean keepAlive = HttpUtil.isKeepAlive(request);
-        // Build the response object.
+        // Build the cors object.
         FullHttpResponse response = new DefaultFullHttpResponse(
                 HTTP_1_1, currentObj.decoderResult().isSuccess()? OK : BAD_REQUEST,
                 Unpooled.copiedBuffer(buf.toString(), CharsetUtil.UTF_8));
@@ -178,7 +178,7 @@ public class HttpSnoopServerHandler extends SimpleChannelInboundHandler<Object> 
             response.headers().add(HttpHeaderNames.SET_COOKIE, ServerCookieEncoder.STRICT.encode("key2", "value2"));
         }
 
-        // Write the response.
+        // Write the cors.
         ctx.write(response);
 
         return keepAlive;

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.http.cors;
+package wjc.netty.http.cors;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
@@ -51,7 +51,7 @@ import io.netty.handler.stream.ChunkedWriteHandler;
  * corsConfig.allowedRequestHeaders("custom-request-header")
  * </pre>
  *
- * <h3>Expose response headers</h3>
+ * <h3>Expose cors headers</h3>
  * By default a browser only exposes the following simple header:
  * <ul>
  * <li>Cache-Control</li>
@@ -61,13 +61,13 @@ import io.netty.handler.stream.ChunkedWriteHandler;
  * <li>Last-Modified</li>
  * <li>Pragma</li>
  * </ul>
- * Any of the above response headers can be retrieved by:
+ * Any of the above cors headers can be retrieved by:
  * <pre>
  * xhr.getResponseHeader("Content-Type");
  * </pre>
  * If you need to get access to other headers this must be enabled by the server, for example:
  * <pre>
- * corsConfig.exposedHeaders("custom-response-header");
+ * corsConfig.exposedHeaders("custom-cors-header");
  * </pre>
  */
 public class HttpCorsServerInitializer extends ChannelInitializer<SocketChannel> {
@@ -80,13 +80,19 @@ public class HttpCorsServerInitializer extends ChannelInitializer<SocketChannel>
 
     @Override
     public void initChannel(SocketChannel ch) {
-        CorsConfig corsConfig = CorsConfigBuilder.forAnyOrigin().allowNullOrigin().allowCredentials().build();
+        // 对于任意来源，允许null来源，允许受信来源
+        CorsConfig corsConfig = CorsConfigBuilder
+                .forAnyOrigin()
+                .allowNullOrigin()
+                .allowCredentials()
+                .build();
         ChannelPipeline pipeline = ch.pipeline();
         if (sslCtx != null) {
             pipeline.addLast(sslCtx.newHandler(ch.alloc()));
         }
         pipeline.addLast(new HttpResponseEncoder());
         pipeline.addLast(new HttpRequestDecoder());
+        // HttpObjectAggregator会把多个消息转换为一个单一的FullHttpRequest或是FullHttpResponse。
         pipeline.addLast(new HttpObjectAggregator(65536));
         pipeline.addLast(new ChunkedWriteHandler());
         pipeline.addLast(new CorsHandler(corsConfig));

@@ -88,7 +88,7 @@ public class OcspServerExample {
         // Step 4: Do the request to the CA's OCSP responder
         OCSPResp response = OcspUtils.request(uri, request, 5L, TimeUnit.SECONDS);
         if (response.getStatus() != OCSPResponseStatus.SUCCESSFUL) {
-            throw new IllegalStateException("response-status=" + response.getStatus());
+            throw new IllegalStateException("cors-status=" + response.getStatus());
         }
 
         // Step 5: Is my certificate any good or has the CA revoked it?
@@ -110,7 +110,7 @@ public class OcspServerExample {
             throw new IllegalStateException("Bad Serials=" + certSerial + " vs. " + ocspSerial);
         }
 
-        // Step 6: Cache the OCSP response and use it as long as it's not
+        // Step 6: Cache the OCSP cors and use it as long as it's not
         // expired. The exact semantics are beyond the scope of this example.
 
         if (!OpenSsl.isAvailable()) {

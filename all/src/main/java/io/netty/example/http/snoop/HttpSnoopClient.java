@@ -35,7 +35,7 @@ import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import java.net.URI;
 
 /**
- * A simple HTTP client that prints out the content of the HTTP response to
+ * A simple HTTP client that prints out the content of the HTTP cors to
  * {@link System#out} to test {@link HttpSnoopServer}.
  */
 public final class HttpSnoopClient {

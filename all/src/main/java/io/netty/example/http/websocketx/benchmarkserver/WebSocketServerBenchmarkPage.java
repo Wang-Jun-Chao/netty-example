@@ -44,7 +44,7 @@ public final class WebSocketServerBenchmarkPage {
                 "<input type=\"radio\" name=\"type\" id=\"typeBinary\" value=\"binary\">binary<br>" + NEWLINE +
                 "Mode:<br>" + NEWLINE +
                 "<input type=\"radio\" name=\"mode\" id=\"modeSingle\" value=\"single\" checked>" +
-                "Wait for response after each messages<br>" + NEWLINE +
+                "Wait for cors after each messages<br>" + NEWLINE +
                 "<input type=\"radio\" name=\"mode\" id=\"modeAll\" value=\"all\">" +
                 "Send all messages and then wait for all responses<br>" + NEWLINE +
                 "<input type=\"checkbox\" id=\"verifiyResponses\">Verify responded messages<br>" + NEWLINE +

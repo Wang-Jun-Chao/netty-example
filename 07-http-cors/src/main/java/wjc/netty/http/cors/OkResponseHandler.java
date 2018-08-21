@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.netty.example.http.cors;
+package wjc.netty.http.cors;
 
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -25,13 +25,13 @@ import io.netty.handler.codec.http.HttpVersion;
 
 /**
  * A simple handler which will simple return a successful Http
- * response for any request.
+ * cors for any request.
  */
 public class OkResponseHandler extends SimpleChannelInboundHandler<Object> {
     @Override
     public void channelRead0(ChannelHandlerContext ctx, Object msg) {
         final FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK);
-        response.headers().set("custom-response-header", "Some value");
+        response.headers().set("custom-cors-header", "Some value");
         ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
     }
 }
