@@ -75,19 +75,23 @@ public class HttpUploadServerHandler extends SimpleChannelInboundHandler<HttpObj
 
     private final StringBuilder responseContent = new StringBuilder();
 
-    private static final HttpDataFactory factory =
-            new DefaultHttpDataFactory(DefaultHttpDataFactory.MINSIZE); // Disk if size exceed
+    /**
+     * Disk if size exceed
+     */
+    private static final HttpDataFactory factory = new DefaultHttpDataFactory(
+            DefaultHttpDataFactory.MINSIZE);
 
     private HttpPostRequestDecoder decoder;
 
     static {
-        DiskFileUpload.deleteOnExitTemporaryFile = true; // should delete file
-                                                         // on exit (in normal
-                                                         // exit)
-        DiskFileUpload.baseDirectory = null; // system temp directory
-        DiskAttribute.deleteOnExitTemporaryFile = true; // should delete file on
-                                                        // exit (in normal exit)
-        DiskAttribute.baseDirectory = null; // system temp directory
+        // should delete file on exit (in normal exit)
+        DiskFileUpload.deleteOnExitTemporaryFile = true;
+        // system temp directory
+        DiskFileUpload.baseDirectory = null;
+        // should delete file on exit (in normal exit)
+        DiskAttribute.deleteOnExitTemporaryFile = true;
+        // system temp directory
+        DiskAttribute.baseDirectory = null;
     }
 
     @Override
@@ -137,8 +141,8 @@ public class HttpUploadServerHandler extends SimpleChannelInboundHandler<HttpObj
 
             QueryStringDecoder decoderQuery = new QueryStringDecoder(request.uri());
             Map<String, List<String>> uriAttributes = decoderQuery.parameters();
-            for (Entry<String, List<String>> attr: uriAttributes.entrySet()) {
-                for (String attrVal: attr.getValue()) {
+            for (Entry<String, List<String>> attr : uriAttributes.entrySet()) {
+                for (String attrVal : attr.getValue()) {
                     responseContent.append("URI: " + attr.getKey() + '=' + attrVal + "\r\n");
                 }
             }
@@ -241,16 +245,16 @@ public class HttpUploadServerHandler extends SimpleChannelInboundHandler<HttpObj
                     partialContent = (HttpData) data;
                     if (partialContent instanceof FileUpload) {
                         builder.append("Start FileUpload: ")
-                            .append(((FileUpload) partialContent).getFilename()).append(" ");
+                                .append(((FileUpload) partialContent).getFilename()).append(" ");
                     } else {
                         builder.append("Start Attribute: ")
-                            .append(partialContent.getName()).append(" ");
+                                .append(partialContent.getName()).append(" ");
                     }
                     builder.append("(DefinedSize: ").append(partialContent.definedLength()).append(")");
                 }
                 if (partialContent.definedLength() > 0) {
                     builder.append(" ").append(partialContent.length() * 100 / partialContent.definedLength())
-                        .append("% ");
+                            .append("% ");
                     logger.info(builder.toString());
                 } else {
                     builder.append(" ").append(partialContent.length()).append(" ");
@@ -384,8 +388,7 @@ public class HttpUploadServerHandler extends SimpleChannelInboundHandler<HttpObj
         responseContent.append("<table border=\"0\">");
         responseContent.append("<tr><td>Fill with value: <br> <input type=text name=\"info\" size=10></td></tr>");
         responseContent.append("<tr><td>Fill with value: <br> <input type=text name=\"secondinfo\" size=20>");
-        responseContent
-                .append("<tr><td>Fill with value: <br> <textarea name=\"thirdinfo\" cols=40 rows=10></textarea>");
+        responseContent.append("<tr><td>Fill with value: <br> <textarea name=\"thirdinfo\" cols=40 rows=10></textarea>");
         responseContent.append("</td></tr>");
         responseContent.append("<tr><td><INPUT TYPE=\"submit\" NAME=\"Send\" VALUE=\"Send\"></INPUT></td>");
         responseContent.append("<td><INPUT TYPE=\"reset\" NAME=\"Clear\" VALUE=\"Clear\" ></INPUT></td></tr>");
@@ -399,8 +402,7 @@ public class HttpUploadServerHandler extends SimpleChannelInboundHandler<HttpObj
         responseContent.append("<table border=\"0\">");
         responseContent.append("<tr><td>Fill with value: <br> <input type=text name=\"info\" size=10></td></tr>");
         responseContent.append("<tr><td>Fill with value: <br> <input type=text name=\"secondinfo\" size=20>");
-        responseContent
-                .append("<tr><td>Fill with value: <br> <textarea name=\"thirdinfo\" cols=40 rows=10></textarea>");
+        responseContent.append("<tr><td>Fill with value: <br> <textarea name=\"thirdinfo\" cols=40 rows=10></textarea>");
         responseContent.append("<tr><td>Fill with file (only file name will be transmitted): <br> "
                 + "<input type=file name=\"myfile\">");
         responseContent.append("</td></tr>");
@@ -416,8 +418,7 @@ public class HttpUploadServerHandler extends SimpleChannelInboundHandler<HttpObj
         responseContent.append("<table border=\"0\">");
         responseContent.append("<tr><td>Fill with value: <br> <input type=text name=\"info\" size=10></td></tr>");
         responseContent.append("<tr><td>Fill with value: <br> <input type=text name=\"secondinfo\" size=20>");
-        responseContent
-                .append("<tr><td>Fill with value: <br> <textarea name=\"thirdinfo\" cols=40 rows=10></textarea>");
+        responseContent.append("<tr><td>Fill with value: <br> <textarea name=\"thirdinfo\" cols=40 rows=10></textarea>");
         responseContent.append("<tr><td>Fill with file: <br> <input type=file name=\"myfile\">");
         responseContent.append("</td></tr>");
         responseContent.append("<tr><td><INPUT TYPE=\"submit\" NAME=\"Send\" VALUE=\"Send\"></INPUT></td>");
