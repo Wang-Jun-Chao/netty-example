@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.http.upload;
+package wjc.netty.http.upload;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -97,7 +97,7 @@ public final class HttpUploadClient {
         URI uriFile = new URI(postFile);
         File file = new File(FILE);
         if (!file.canRead()) {
-            throw new FileNotFoundException(FILE);
+            throw new FileNotFoundException(file.getAbsolutePath());
         }
 
         // Configure the client.
@@ -157,7 +157,7 @@ public final class HttpUploadClient {
         // add Form attribute
         encoder.addParam("getform", "GET");
         encoder.addParam("info", "first value");
-        encoder.addParam("secondinfo", "secondvalue ���&");
+        encoder.addParam("secondinfo", "secondvalue abcdefg");
         // not the big one since it is not compatible with GET size
         // encoder.addParam("thirdinfo", textArea);
         encoder.addParam("thirdinfo", "third value\r\ntest second line\r\n\r\nnew line\r\n");
@@ -226,7 +226,7 @@ public final class HttpUploadClient {
         // add Form attribute
         bodyRequestEncoder.addBodyAttribute("getform", "POST");
         bodyRequestEncoder.addBodyAttribute("info", "first value");
-        bodyRequestEncoder.addBodyAttribute("secondinfo", "secondvalue ���&");
+        bodyRequestEncoder.addBodyAttribute("secondinfo", "secondvalue abcdefg");
         bodyRequestEncoder.addBodyAttribute("thirdinfo", textArea);
         bodyRequestEncoder.addBodyAttribute("fourthinfo", textAreaLong);
         bodyRequestEncoder.addBodyFileUpload("myfile", file, "application/x-zip-compressed", false);
@@ -309,7 +309,7 @@ public final class HttpUploadClient {
     private static final String textArea = "short text";
     // use to simulate a big TEXTAREA field in a form
     private static final String textAreaLong =
-            "lkjlkjlKJLKJLKJLKJLJlkj lklkj\r\n\r\nLKJJJJJJJJKKKKKKKKKKKKKKK ����&\r\n\r\n" +
+            "lkjlkjlKJLKJLKJLKJLJlkj lklkj\r\n\r\nLKJJJJJJJJKKKKKKKKKKKKKKK \r\n\r\n" +
             "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n" +
             "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n" +
             "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\r\n" +
