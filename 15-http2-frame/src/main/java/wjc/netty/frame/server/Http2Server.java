@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 The Netty Project
+ * Copyright 2016 The Netty Project
  *
  * The Netty Project licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
@@ -14,7 +14,7 @@
  * under the License.
  */
 
-package io.netty.example.http2.helloworld.server;
+package wjc.netty.frame.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -40,6 +40,9 @@ import io.netty.handler.ssl.util.SelfSignedCertificate;
 /**
  * A HTTP/2 Server that responds to requests with a Hello World. Once started, you can test the
  * server with the example client.
+ *
+ * <p>This example is making use of the "multiplexing" http2 API, where streams are mapped to child
+ * Channels. This API is very experimental and incomplete.
  */
 public final class Http2Server {
 

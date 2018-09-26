@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 The Netty Project
+ * Copyright 2016 The Netty Project
  *
  * The Netty Project licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
@@ -14,7 +14,7 @@
  * under the License.
  */
 
-package io.netty.example.http2.helloworld.server;
+package wjc.netty.frame.server;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -28,8 +28,8 @@ import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.HttpServerUpgradeHandler;
 import io.netty.handler.codec.http.HttpServerUpgradeHandler.UpgradeCodec;
 import io.netty.handler.codec.http.HttpServerUpgradeHandler.UpgradeCodecFactory;
-import io.netty.handler.codec.http2.CleartextHttp2ServerUpgradeHandler;
 import io.netty.handler.codec.http2.Http2CodecUtil;
+import io.netty.handler.codec.http2.Http2MultiplexCodecBuilder;
 import io.netty.handler.codec.http2.Http2ServerUpgradeCodec;
 import io.netty.handler.ssl.SslContext;
 import io.netty.util.AsciiString;
@@ -45,7 +45,8 @@ public class Http2ServerInitializer extends ChannelInitializer<SocketChannel> {
         @Override
         public UpgradeCodec newUpgradeCodec(CharSequence protocol) {
             if (AsciiString.contentEquals(Http2CodecUtil.HTTP_UPGRADE_PROTOCOL_NAME, protocol)) {
-                return new Http2ServerUpgradeCodec(new HelloWorldHttp2HandlerBuilder().build());
+                return new Http2ServerUpgradeCodec(
+                        Http2MultiplexCodecBuilder.forServer(new HelloWorldHttp2Handler()).build());
             } else {
                 return null;
             }
@@ -89,12 +90,9 @@ public class Http2ServerInitializer extends ChannelInitializer<SocketChannel> {
     private void configureClearText(SocketChannel ch) {
         final ChannelPipeline p = ch.pipeline();
         final HttpServerCodec sourceCodec = new HttpServerCodec();
-        final HttpServerUpgradeHandler upgradeHandler = new HttpServerUpgradeHandler(sourceCodec, upgradeCodecFactory);
-        final CleartextHttp2ServerUpgradeHandler cleartextHttp2ServerUpgradeHandler =
-                new CleartextHttp2ServerUpgradeHandler(sourceCodec, upgradeHandler,
-                                                       new HelloWorldHttp2HandlerBuilder().build());
 
-        p.addLast(cleartextHttp2ServerUpgradeHandler);
+        p.addLast(sourceCodec);
+        p.addLast(new HttpServerUpgradeHandler(sourceCodec, upgradeCodecFactory));
         p.addLast(new SimpleChannelInboundHandler<HttpMessage>() {
             @Override
             protected void channelRead0(ChannelHandlerContext ctx, HttpMessage msg) throws Exception {
