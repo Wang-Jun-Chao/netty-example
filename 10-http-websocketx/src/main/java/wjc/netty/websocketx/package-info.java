@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 The Netty Project
+ * Copyright 2014 The Netty Project
  *
  * The Netty Project licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
@@ -15,12 +15,13 @@
  */
 
 /**
- * <p>This package contains an example web socket web server.
- * <p>The web server only handles text, ping and closing frames.  For text frames,
- * it echoes the received text in upper case.
- * <p>Once started, you can test the web server against your browser by navigating
- * to http://localhost:8080/
+ * <p>This package contains a benchmark application for websockets.
+ * <p>The websocketx server will accept websocketx upgrade requests and simply echo
+ * all incoming frames.
+ * <p>The supplied index page contains a benchmark client that runs in a browser.
+ * <p>Once started, you can start benchmarking by by navigating
+ * to http://localhost:8080/ with your browser.
  * <p>You can also test it with a web socket client. Send web socket traffic to
- * ws://localhost:8080/websocket.
+ * ws://localhost:8080/websocketx.
  */
-package io.netty.example.http.websocketx.server;
+package wjc.netty.websocketx;

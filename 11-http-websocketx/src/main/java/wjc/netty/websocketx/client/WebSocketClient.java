@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.http.websocketx.client;
+package wjc.netty.websocketx.client;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;
@@ -49,7 +49,7 @@ import java.net.URI;
  * Therefore you can either start the WebSocket server from the examples
  * by running {@link io.netty.example.http.websocketx.server.WebSocketServer}
  * or connect to an existing WebSocket server such as
- * <a href="http://www.websocket.org/echo.html">ws://echo.websocket.org</a>.
+ * <a href="http://www.websocket.org/echo.html">ws://echo.websocketx.org</a>.
  * <p>
  * The client will attempt to connect to the URI passed to it as the first argument.
  * You don't have to specify any arguments if you want to connect to the example WebSocket server,
@@ -57,7 +57,7 @@ import java.net.URI;
  */
 public final class WebSocketClient {
 
-    static final String URL = System.getProperty("url", "ws://127.0.0.1:8080/websocket");
+    static final String URL = System.getProperty("url", "ws://127.0.0.1:8080/websocketx");
 
     public static void main(String[] args) throws Exception {
         URI uri = new URI(URL);
