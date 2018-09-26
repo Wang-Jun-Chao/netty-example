@@ -13,7 +13,7 @@
  * the License.
  */
 
-package io.netty.example.http2.helloworld.frame.server;
+package wjc.netty.multiplex.server;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
@@ -23,9 +23,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http2.DefaultHttp2DataFrame;
 import io.netty.handler.codec.http2.DefaultHttp2Headers;
 import io.netty.handler.codec.http2.DefaultHttp2HeadersFrame;
-import io.netty.handler.codec.http2.DefaultHttp2WindowUpdateFrame;
 import io.netty.handler.codec.http2.Http2DataFrame;
-import io.netty.handler.codec.http2.Http2FrameStream;
 import io.netty.handler.codec.http2.Http2Headers;
 import io.netty.handler.codec.http2.Http2HeadersFrame;
 import io.netty.util.CharsetUtil;
@@ -37,7 +35,8 @@ import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 /**
  * A simple handler that responds with the message "Hello World!".
  *
- * <p>This example is making use of the "frame codec" http2 API. This API is very experimental and incomplete.
+ * <p>This example is making use of the "multiplexing" http2 API, where streams are mapped to child
+ * Channels. This API is very experimental and incomplete.
  */
 @Sharable
 public class HelloWorldHttp2Handler extends ChannelDuplexHandler {
@@ -71,17 +70,12 @@ public class HelloWorldHttp2Handler extends ChannelDuplexHandler {
      * If receive a frame with end-of-stream set, send a pre-canned cors.
      */
     private static void onDataRead(ChannelHandlerContext ctx, Http2DataFrame data) throws Exception {
-        Http2FrameStream stream = data.stream();
-
         if (data.isEndStream()) {
-            sendResponse(ctx, stream, data.content());
+            sendResponse(ctx, data.content());
         } else {
             // We do not send back the cors to the remote-peer, so we need to release it.
             data.release();
         }
-
-        // Update the flowcontroller
-        ctx.write(new DefaultHttp2WindowUpdateFrame(data.initialFlowControlledBytes()).stream(stream));
     }
 
     /**
@@ -93,17 +87,17 @@ public class HelloWorldHttp2Handler extends ChannelDuplexHandler {
             ByteBuf content = ctx.alloc().buffer();
             content.writeBytes(RESPONSE_BYTES.duplicate());
             ByteBufUtil.writeAscii(content, " - via HTTP/2");
-            sendResponse(ctx, headers.stream(), content);
+            sendResponse(ctx, content);
         }
     }
 
     /**
      * Sends a "Hello World" DATA frame to the client.
      */
-    private static void sendResponse(ChannelHandlerContext ctx, Http2FrameStream stream, ByteBuf payload) {
+    private static void sendResponse(ChannelHandlerContext ctx, ByteBuf payload) {
         // Send a frame for the cors status
         Http2Headers headers = new DefaultHttp2Headers().status(OK.codeAsText());
-        ctx.write(new DefaultHttp2HeadersFrame(headers).stream(stream));
-        ctx.write(new DefaultHttp2DataFrame(payload, true).stream(stream));
+        ctx.write(new DefaultHttp2HeadersFrame(headers));
+        ctx.write(new DefaultHttp2DataFrame(payload, true));
     }
 }

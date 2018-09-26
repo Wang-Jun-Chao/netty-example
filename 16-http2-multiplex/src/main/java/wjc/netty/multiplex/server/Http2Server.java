@@ -14,7 +14,7 @@
  * under the License.
  */
 
-package io.netty.example.http2.helloworld.multiplex.server;
+package wjc.netty.multiplex.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
