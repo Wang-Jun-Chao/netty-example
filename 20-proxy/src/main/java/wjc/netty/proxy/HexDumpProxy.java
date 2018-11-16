@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.proxy;
+package wjc.netty.proxy;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelOption;
@@ -25,9 +25,9 @@ import io.netty.handler.logging.LoggingHandler;
 
 public final class HexDumpProxy {
 
-    static final int LOCAL_PORT = Integer.parseInt(System.getProperty("localPort", "8443"));
-    static final String REMOTE_HOST = System.getProperty("remoteHost", "www.baidu.com");
-    static final int REMOTE_PORT = Integer.parseInt(System.getProperty("remotePort", "443"));
+    static final int    LOCAL_PORT  = Integer.parseInt(System.getProperty("localPort", "8443"));
+    static final String REMOTE_HOST = System.getProperty("remoteHost", "reporttest.gf.com.cn");
+    static final int    REMOTE_PORT = Integer.parseInt(System.getProperty("remotePort", "3000"));
 
     public static void main(String[] args) throws Exception {
         System.err.println("Proxying *:" + LOCAL_PORT + " to " + REMOTE_HOST + ':' + REMOTE_PORT + " ...");
@@ -38,11 +38,11 @@ public final class HexDumpProxy {
         try {
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)
-             .channel(NioServerSocketChannel.class)
-             .handler(new LoggingHandler(LogLevel.INFO))
-             .childHandler(new HexDumpProxyInitializer(REMOTE_HOST, REMOTE_PORT))
-             .childOption(ChannelOption.AUTO_READ, false)
-             .bind(LOCAL_PORT).sync().channel().closeFuture().sync();
+                    .channel(NioServerSocketChannel.class)
+                    .handler(new LoggingHandler(LogLevel.INFO))
+                    .childHandler(new HexDumpProxyInitializer(REMOTE_HOST, REMOTE_PORT))
+                    .childOption(ChannelOption.AUTO_READ, false)
+                    .bind(LOCAL_PORT).sync().channel().closeFuture().sync();
         } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
