@@ -47,6 +47,7 @@ import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -307,7 +308,11 @@ public class HttpStaticLogFileServerHandler extends SimpleChannelInboundHandler<
                 .append("<ul>")
                 .append("<li><a href=\"../\">..</a></li>\r\n");
 
-        for (File f : dir.listFiles()) {
+
+        File[] files = dir.listFiles();
+        Arrays.sort(files);
+
+        for (File f : files) {
             if (f.isHidden() || !f.canRead()) {
                 continue;
             }
