@@ -13,36 +13,41 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.proxy;
+package io.netty.cases.chapter07;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
-public final class HexDumpProxy {
+/**
+ * Created by ���ַ� on 2018/8/11.
+ */
+public final class ThreadSecurityServer {
 
-    static final int LOCAL_PORT = Integer.parseInt(System.getProperty("localPort", "8443"));
-    static final String REMOTE_HOST = System.getProperty("remoteHost", "www.baidu.com");
-    static final int REMOTE_PORT = Integer.parseInt(System.getProperty("remotePort", "443"));
+    static final int PORT = Integer.parseInt(System.getProperty("port", "18087"));
 
     public static void main(String[] args) throws Exception {
-        System.err.println("Proxying *:" + LOCAL_PORT + " to " + REMOTE_HOST + ':' + REMOTE_PORT + " ...");
-
-        // Configure the bootstrap.
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)
              .channel(NioServerSocketChannel.class)
+             .option(ChannelOption.SO_BACKLOG, 100)
              .handler(new LoggingHandler(LogLevel.INFO))
-             .childHandler(new HexDumpProxyInitializer(REMOTE_HOST, REMOTE_PORT))
-             .childOption(ChannelOption.AUTO_READ, false)
-             .bind(LOCAL_PORT).sync().channel().closeFuture().sync();
+             .childHandler(new ChannelInitializer<SocketChannel>() {
+                 @Override
+                 public void initChannel(SocketChannel ch) throws Exception {
+                     ChannelPipeline p = ch.pipeline();
+                     p.addLast(new ThreadSecurityServerHandler());
+                 }
+             });
+            ChannelFuture f = b.bind(PORT).sync();
+            f.channel().closeFuture().sync();
         } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
