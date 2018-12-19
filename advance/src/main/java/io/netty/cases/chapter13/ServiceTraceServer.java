@@ -27,7 +27,8 @@ import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import io.netty.util.concurrent.EventExecutorGroup;
 
 /**
- * Created by ���ַ� on 2018/8/19.
+ *  * @author: wangjunchao(王俊超)
+ * @date: 2018-12-19 11:00:08
  */
 public final class ServiceTraceServer {
 

@@ -28,7 +28,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Created by ���ַ� on 2018/8/18.
+ *  * @author: wangjunchao(王俊超)
+ * @date: 2018-12-19 11:00:08
  */
 public class IotCarsServerHandler extends ChannelInboundHandlerAdapter {
     static AtomicInteger sum  = new AtomicInteger(0);

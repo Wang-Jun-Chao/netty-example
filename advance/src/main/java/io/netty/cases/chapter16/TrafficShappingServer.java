@@ -32,7 +32,8 @@ import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.traffic.ChannelTrafficShapingHandler;
 
 /**
- * Created by 李林峰 on 2018/9/2
+ * @author: wangjunchao(王俊超)
+ * @date: 2018-12-19 11:00:08
  */
 public class TrafficShappingServer {
     public void bind(int port) throws Exception {

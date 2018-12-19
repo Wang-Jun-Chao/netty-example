@@ -11,7 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by ÀîÁÖ·å on 2018/8/3.
+ * @author: wangjunchao(Íõ¿¡³¬)
+ * @date: 2018-12-19 11:00:08
  */
 public class EchoExitServer3 {
 

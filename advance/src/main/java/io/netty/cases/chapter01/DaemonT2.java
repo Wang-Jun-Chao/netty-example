@@ -3,7 +3,8 @@ package io.netty.cases.chapter01;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by ÀîÁÖ·å on 2018/8/3.
+ * @author: wangjunchao(Íõ¿¡³¬)
+ * @date: 2018-12-19 11:00:08
  */
 public class DaemonT2 {
     public static void main(String[] args)

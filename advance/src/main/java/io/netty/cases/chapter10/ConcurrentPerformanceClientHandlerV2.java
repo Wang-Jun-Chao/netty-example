@@ -25,7 +25,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by ���ַ� on 2018/8/19.
+ *  * @author: wangjunchao(王俊超)
+ * @date: 2018-12-19 11:00:08
  */
 public class ConcurrentPerformanceClientHandlerV2 extends ChannelInboundHandlerAdapter {
     static ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();

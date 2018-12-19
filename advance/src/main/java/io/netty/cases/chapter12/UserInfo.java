@@ -1,7 +1,8 @@
 package io.netty.cases.chapter12;
 
 /**
- * Created by ���ַ� on 2018/8/27.
+ *  * @author: wangjunchao(王俊超)
+ * @date: 2018-12-19 11:00:08
  */
 public class UserInfo implements Cloneable{
 

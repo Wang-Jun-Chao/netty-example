@@ -18,26 +18,27 @@ package io.netty.cases.chapter03;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.util.ReferenceCountUtil;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Created by 李林峰 on 2018/8/5.
+ * @author: wangjunchao(王俊超)
+ * @date: 2018-12-19 11:00:08
  */
 public class RouterServerHandlerV2 extends SimpleChannelInboundHandler<ByteBuf> {
     static ExecutorService executorService = Executors.newSingleThreadExecutor();
     PooledByteBufAllocator allocator;
+
     @Override
     public void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) {
-        byte [] body = new byte[msg.readableBytes()];
-        executorService.execute(()->
+        byte[] body = new byte[msg.readableBytes()];
+        executorService.execute(() ->
         {
-            if(allocator == null)
+            if (allocator == null) {
                 allocator = new PooledByteBufAllocator(false);
+            }
             //解析请求消息，做路由转发，代码省略...
             //转发成功，返回响应给客户端
             ByteBuf respMsg = allocator.heapBuffer(body.length);
@@ -45,6 +46,7 @@ public class RouterServerHandlerV2 extends SimpleChannelInboundHandler<ByteBuf> 
             ctx.writeAndFlush(respMsg);
         });
     }
+
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         cause.printStackTrace();

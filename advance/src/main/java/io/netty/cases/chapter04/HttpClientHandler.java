@@ -9,7 +9,8 @@ import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.util.concurrent.DefaultPromise;
 
 /**
- * Created by ���ַ� on 2018/8/11.
+ *  * @author: wangjunchao(王俊超)
+ * @date: 2018-12-19 11:00:08
  *
  */
 public class HttpClientHandler extends SimpleChannelInboundHandler<FullHttpResponse> {

@@ -7,7 +7,8 @@ import io.netty.handler.codec.http.HttpVersion;
 import java.util.Arrays;
 
 /**
- * Created by 李林峰 on 2018/8/26.
+ * @author: wangjunchao(王俊超)
+ * @date: 2018-12-19 11:00:08
  */
 public class RestfulReqV2 {
 
