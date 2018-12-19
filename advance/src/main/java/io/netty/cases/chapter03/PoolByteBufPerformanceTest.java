@@ -5,24 +5,21 @@ import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.buffer.Unpooled;
 
 /**
- *  * @author: wangjunchao(王俊超)
+ * @author: wangjunchao(王俊超)
  * @date: 2018-12-19 11:00:08
  */
 public class PoolByteBufPerformanceTest {
 
-    public static void main(String [] args)
-    {
-//        unPoolTest();
+    public static void main(String[] args) {
+        unPoolTest();
         poolTest();
     }
-    static void unPoolTest()
-    {
-        //���ڴ��ģʽ
+
+    private static void unPoolTest() {
         long beginTime = System.currentTimeMillis();
         ByteBuf buf = null;
-        int maxTimes = 100000000;
-        for(int i = 0; i < maxTimes; i++)
-        {
+        int maxTimes = 10000000;
+        for (int i = 0; i < maxTimes; i++) {
             buf = Unpooled.buffer(10 * 1024);
             buf.release();
         }
@@ -30,15 +27,12 @@ public class PoolByteBufPerformanceTest {
                 + (System.currentTimeMillis() - beginTime));
     }
 
-    static void poolTest()
-    {
-        //�ڴ��ģʽ
+    private static void poolTest() {
         PooledByteBufAllocator allocator = new PooledByteBufAllocator(false);
         long beginTime = System.currentTimeMillis();
         ByteBuf buf = null;
-        int maxTimes = 100000000;
-        for(int i = 0; i < maxTimes; i++)
-        {
+        int maxTimes = 10000000;
+        for (int i = 0; i < maxTimes; i++) {
             buf = allocator.heapBuffer(10 * 1024);
             buf.release();
         }

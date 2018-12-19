@@ -31,18 +31,24 @@ public class RouterServerHandlerV2 extends SimpleChannelInboundHandler<ByteBuf> 
     static ExecutorService executorService = Executors.newSingleThreadExecutor();
     PooledByteBufAllocator allocator;
 
+    /**
+     * channelRead0 方法被超类的 channelRead 方法调用，会自动释放内存
+     *
+     * @param ctx
+     * @param msg
+     */
     @Override
     public void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) {
         byte[] body = new byte[msg.readableBytes()];
-        executorService.execute(() ->
-        {
+        executorService.execute(() -> {
             if (allocator == null) {
                 allocator = new PooledByteBufAllocator(false);
             }
-            //解析请求消息，做路由转发，代码省略...
-            //转发成功，返回响应给客户端
+            // 解析请求消息，做路由转发，代码省略...
+            // 转发成功，返回响应给客户端
             ByteBuf respMsg = allocator.heapBuffer(body.length);
-            respMsg.writeBytes(body);//作为示例，简化处理，将请求返回
+            // 作为示例，简化处理，将请求返回
+            respMsg.writeBytes(body);
             ctx.writeAndFlush(respMsg);
         });
     }
