@@ -30,33 +30,32 @@ import io.netty.channel.socket.nio.NioSocketChannel;
  */
 public class ConcurrentPerformanceClient {
 
-    static final String HOST = System.getProperty("host", "127.0.0.1");
-    static final int PORT = Integer.parseInt(System.getProperty("port", "18088"));
-    static final int MSG_SIZE = 256;
-
-    public void run() throws Exception  {
-			connect();
-    }
-    
-    public void connect() throws Exception
-    {
-        EventLoopGroup group = new NioEventLoopGroup(8);
-            Bootstrap b = new Bootstrap();
-            b.group(group)
-             .channel(NioSocketChannel.class)
-             .option(ChannelOption.TCP_NODELAY, true)
-             .handler(new ChannelInitializer<SocketChannel>() {
-                 @Override
-                 public void initChannel(SocketChannel ch) throws Exception {
-                     ch.pipeline().addLast(new ConcurrentPerformanceClientHandler());
-                 }
-             });
-        ChannelFuture f = b.connect(HOST, PORT).sync();
-        f.channel().closeFuture().sync();
-        group.shutdownGracefully();
-        }
+    static final String HOST     = System.getProperty("host", "127.0.0.1");
+    static final int    PORT     = Integer.parseInt(System.getProperty("port", "18088"));
+    static final int    MSG_SIZE = 256;
 
     public static void main(String[] args) throws Exception {
         new ConcurrentPerformanceClient().run();
+    }
+
+    public void run() throws Exception {
+        connect();
+    }
+
+    public void connect() throws Exception {
+        EventLoopGroup group = new NioEventLoopGroup(8);
+        Bootstrap b = new Bootstrap();
+        b.group(group)
+                .channel(NioSocketChannel.class)
+                .option(ChannelOption.TCP_NODELAY, true)
+                .handler(new ChannelInitializer<SocketChannel>() {
+                    @Override
+                    public void initChannel(SocketChannel ch) throws Exception {
+                        ch.pipeline().addLast(new ConcurrentPerformanceClientHandler());
+                    }
+                });
+        ChannelFuture f = b.connect(HOST, PORT).sync();
+        f.channel().closeFuture().sync();
+        group.shutdownGracefully();
     }
 }

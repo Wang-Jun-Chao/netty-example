@@ -16,13 +16,11 @@
 package io.netty.cases.chapter06;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author: wangjunchao(王俊超)
@@ -31,6 +29,7 @@ import java.util.concurrent.TimeUnit;
 public class ApiGatewayServerHandler extends ChannelInboundHandlerAdapter {
 
     ExecutorService executorService = Executors.newFixedThreadPool(8);
+
     @Override
 //    public void channelRead(ChannelHandlerContext ctx, Object msg) {
 //        ctx.write(msg);
@@ -50,10 +49,10 @@ public class ApiGatewayServerHandler extends ChannelInboundHandlerAdapter {
 
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ctx.write(msg);
-        char [] req = new char[((ByteBuf)msg).readableBytes()];
-        executorService.execute(()->
+        char[] req = new char[((ByteBuf) msg).readableBytes()];
+        executorService.execute(() ->
         {
-            char [] dispatchReq = req;
+            char[] dispatchReq = req;
 //            try
 //            {
 //                TimeUnit.MICROSECONDS.sleep(500);

@@ -31,23 +31,21 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @date: 2018-12-19 11:00:08
  */
 public class IotCarsDiscardServerHandler extends ChannelInboundHandlerAdapter {
-    static AtomicInteger sum  = new AtomicInteger(0);
-    static ExecutorService executorService = new ThreadPoolExecutor(1,3,30, TimeUnit.SECONDS,
-            new ArrayBlockingQueue<Runnable>(1000),new ThreadPoolExecutor.DiscardPolicy());
+    static AtomicInteger   sum             = new AtomicInteger(0);
+    static ExecutorService executorService = new ThreadPoolExecutor(1, 3, 30, TimeUnit.SECONDS,
+            new ArrayBlockingQueue<Runnable>(1000), new ThreadPoolExecutor.DiscardPolicy());
+
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         System.out.println(new Date() + "--> Server receive client message : " + sum.incrementAndGet());
-        executorService.execute(()->
+        executorService.execute(() ->
         {
             ByteBuf req = (ByteBuf) msg;
             //����ҵ���߼������������ݿ�
-            if (sum.get() % 100 == 0 || (Thread.currentThread()== ctx.channel().eventLoop()))
-                try
-                {
+            if (sum.get() % 100 == 0 || (Thread.currentThread() == ctx.channel().eventLoop()))
+                try {
                     //�������ݿ⣬ģ��ż�ֵ����ݿ�����ͬ������15��
                     TimeUnit.SECONDS.sleep(15);
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             //ת����Ϣ���˴�����ʡ�ԣ�ת���ɹ�֮�󷵻���Ӧ���ն�

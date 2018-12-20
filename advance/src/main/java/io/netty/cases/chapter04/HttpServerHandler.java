@@ -24,6 +24,14 @@ import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
  */
 public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
+    private static void sendError(ChannelHandlerContext ctx, HttpResponseStatus status) {
+        FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, status,
+                Unpooled.copiedBuffer("Failure: " + status.toString() + "\r\n", CharsetUtil.UTF_8));
+        response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain; charset=UTF-8");
+        System.out.println(response);
+        ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
+    }
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception {
         if (!request.decoderResult().isSuccess()) {
@@ -42,13 +50,5 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         cause.printStackTrace();
         ctx.close();
-    }
-
-    private static void sendError(ChannelHandlerContext ctx, HttpResponseStatus status) {
-        FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, status,
-                Unpooled.copiedBuffer("Failure: " + status.toString() + "\r\n", CharsetUtil.UTF_8));
-        response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain; charset=UTF-8");
-        System.out.println(response);
-        ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
     }
 }

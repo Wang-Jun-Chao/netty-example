@@ -16,14 +16,11 @@
 package io.netty.cases.chapter05;
 
 import io.netty.channel.ChannelHandler.Sharable;
-import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
-import java.util.concurrent.TimeUnit;
-
 /**
- *@author: wangjunchao(王俊超)
+ * @author: wangjunchao(王俊超)
  * @date: 2018-12-19 11:00:08
  */
 @Sharable

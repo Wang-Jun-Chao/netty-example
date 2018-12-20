@@ -30,28 +30,26 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @date: 2018-12-19 11:00:08
  */
 public class ConcurrentPerformanceServerHandler extends ChannelInboundHandlerAdapter {
-    AtomicInteger counter = new AtomicInteger(0);
     static ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+    AtomicInteger counter = new AtomicInteger(0);
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        scheduledExecutorService.scheduleAtFixedRate(()->
+        scheduledExecutorService.scheduleAtFixedRate(() ->
         {
             int qps = counter.getAndSet(0);
             System.out.println("The server QPS is : " + qps);
-        },0,1000, TimeUnit.MILLISECONDS);
+        }, 0, 1000, TimeUnit.MILLISECONDS);
     }
 
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        ((ByteBuf)msg).release();
+        ((ByteBuf) msg).release();
         counter.incrementAndGet();
         //ҵ���߼�����ģ��ҵ�����DB������ȣ�ʱ�Ӵ�100-1000����֮�䲻��
         Random random = new Random();
-        try
-        {
+        try {
             TimeUnit.MILLISECONDS.sleep(random.nextInt(1000));
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

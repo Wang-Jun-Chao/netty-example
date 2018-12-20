@@ -16,14 +16,9 @@
 package io.netty.cases.chapter13;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.util.concurrent.EventExecutor;
-import io.netty.util.concurrent.SingleThreadEventExecutor;
 
-import java.util.Iterator;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -34,20 +29,21 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @date: 2018-12-19 11:00:08
  */
 public class ServiceTraceProfileServerHandler extends ChannelInboundHandlerAdapter {
-    AtomicInteger totalReadBytes = new AtomicInteger(0);
     static ScheduledExecutorService kpiExecutorService = Executors.newSingleThreadScheduledExecutor();
+    AtomicInteger totalReadBytes = new AtomicInteger(0);
+
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        kpiExecutorService.scheduleAtFixedRate(()->
+        kpiExecutorService.scheduleAtFixedRate(() ->
         {
             int readRates = totalReadBytes.getAndSet(0);
             System.out.println(ctx.channel() + "--> read rates " + readRates + " bytes/s");
-        },0,1000, TimeUnit.MILLISECONDS);
+        }, 0, 1000, TimeUnit.MILLISECONDS);
         ctx.fireChannelActive();
     }
 
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        int readableBytes = ((ByteBuf)msg).readableBytes();
+        int readableBytes = ((ByteBuf) msg).readableBytes();
         totalReadBytes.getAndAdd(readableBytes);
         ctx.fireChannelRead(msg);
     }

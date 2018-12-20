@@ -21,37 +21,39 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
+import io.netty.channel.WriteBufferWaterMark;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 /**
- *@author: wangjunchao(王俊超)
+ * @author: wangjunchao(王俊超)
  * @date: 2018-12-19 11:00:08
  */
 public final class LoadRunnerClient {
 
     static final String HOST = System.getProperty("host", "127.0.0.1");
-    static final int PORT = Integer.parseInt(System.getProperty("port", "18085"));
+    static final int    PORT = Integer.parseInt(System.getProperty("port", "18085"));
 
-    @SuppressWarnings({ "unchecked", "deprecation" })
+    @SuppressWarnings({"unchecked", "deprecation"})
     public static void main(String[] args) throws Exception {
         EventLoopGroup group = new NioEventLoopGroup();
         try {
             Bootstrap b = new Bootstrap();
             b.group(group)
-             .channel(NioSocketChannel.class)
-             .option(ChannelOption.TCP_NODELAY, true)
-                    .option(ChannelOption.WRITE_BUFFER_HIGH_WATER_MARK, 10 * 1024 * 1024)
-             .handler(new ChannelInitializer<SocketChannel>() {
-                 @Override
-                 public void initChannel(SocketChannel ch) throws Exception {
-                     ChannelPipeline p = ch.pipeline();
+                    .channel(NioSocketChannel.class)
+                    .option(ChannelOption.TCP_NODELAY, true)
+                    .option(ChannelOption.WRITE_BUFFER_WATER_MARK, new WriteBufferWaterMark(
+                            1024,10 * 1024 * 1024))
+                    .handler(new ChannelInitializer<SocketChannel>() {
+                        @Override
+                        public void initChannel(SocketChannel ch) throws Exception {
+                            ChannelPipeline p = ch.pipeline();
 //                     p.addLast(new LoadRunnerClientHandler());
 //                     p.addLast(new LoadRunnerWaterClientHandler());
-                     p.addLast(new LoadRunnerSleepClientHandler());
-                 }
-             });
+                            p.addLast(new LoadRunnerSleepClientHandler());
+                        }
+                    });
             ChannelFuture f = b.connect(HOST, PORT).sync();
             f.channel().closeFuture().sync();
         } finally {

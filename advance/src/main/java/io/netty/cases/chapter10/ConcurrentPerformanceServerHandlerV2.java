@@ -34,31 +34,28 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @ChannelHandler.Sharable
 public class ConcurrentPerformanceServerHandlerV2 extends ChannelInboundHandlerAdapter {
-    static AtomicInteger counter = new AtomicInteger(0);
+    static AtomicInteger            counter                  = new AtomicInteger(0);
     static ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-    static ExecutorService executorService = Executors.newFixedThreadPool(100);
+    static ExecutorService          executorService          = Executors.newFixedThreadPool(100);
 
-    public ConcurrentPerformanceServerHandlerV2()
-    {
-        scheduledExecutorService.scheduleAtFixedRate(()->
+    public ConcurrentPerformanceServerHandlerV2() {
+        scheduledExecutorService.scheduleAtFixedRate(() ->
         {
             int qps = counter.getAndSet(0);
             System.out.println("The server QPS is : " + qps);
-        },0,1000, TimeUnit.MILLISECONDS);
+        }, 0, 1000, TimeUnit.MILLISECONDS);
     }
 
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        ((ByteBuf)msg).release();
-        executorService.execute(()->
+        ((ByteBuf) msg).release();
+        executorService.execute(() ->
         {
             counter.incrementAndGet();
             //ҵ���߼�����ģ��ҵ�����DB������ȣ�ʱ�Ӵ�100-1000����֮�䲻��
             Random random = new Random();
-            try
-            {
+            try {
                 TimeUnit.MILLISECONDS.sleep(random.nextInt(1000));
-            }catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });

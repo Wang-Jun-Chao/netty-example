@@ -29,7 +29,7 @@ public class NoThreadSecurityClientHandler extends ChannelInboundHandlerAdapter 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         ByteBuf firstMessage = Unpooled.buffer(NoThreadSecurityClient.MSG_SIZE);
-        for (int i = 0; i < firstMessage.capacity(); i ++) {
+        for (int i = 0; i < firstMessage.capacity(); i++) {
             firstMessage.writeByte((byte) i);
         }
         ctx.writeAndFlush(firstMessage);
@@ -42,7 +42,7 @@ public class NoThreadSecurityClientHandler extends ChannelInboundHandlerAdapter 
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
-       ctx.flush();
+        ctx.flush();
     }
 
     @Override

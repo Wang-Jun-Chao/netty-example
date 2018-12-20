@@ -20,6 +20,13 @@ import io.netty.handler.codec.http.HttpServerCodec;
  */
 public class HttpServer {
 
+    public static void main(String[] args) throws Exception {
+        HttpServer server = new HttpServer();
+        int port = 18084;
+        System.out.println("HTTP server listening on " + port);
+        server.bind(port);
+    }
+
     private void bind(int port) throws Exception {
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup(1);
@@ -40,12 +47,5 @@ public class HttpServer {
             workerGroup.shutdownGracefully();
             bossGroup.shutdownGracefully();
         }
-    }
-
-    public static void main(String[] args) throws Exception {
-        HttpServer server = new HttpServer();
-        int port = 18084;
-        System.out.println("HTTP server listening on " + port);
-        server.bind(port);
     }
 }

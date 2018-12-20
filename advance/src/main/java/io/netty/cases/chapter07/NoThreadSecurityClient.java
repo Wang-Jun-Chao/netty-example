@@ -17,7 +17,10 @@ package io.netty.cases.chapter07;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.cases.chapter08.IotCarsClientHandler;
-import io.netty.channel.*;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -29,38 +32,36 @@ import io.netty.handler.logging.LoggingHandler;
  */
 public class NoThreadSecurityClient {
 
-    static final String HOST = System.getProperty("host", "127.0.0.1");
-    static final int PORT = Integer.parseInt(System.getProperty("port", "18087"));
-    static final int MSG_SIZE = 256;
+    static final String HOST     = System.getProperty("host", "127.0.0.1");
+    static final int    PORT     = Integer.parseInt(System.getProperty("port", "18087"));
+    static final int    MSG_SIZE = 256;
 
-    public void run() throws Exception  {
-			connect();
+    public static void main(String[] args) throws Exception {
+        new NoThreadSecurityClient().run();
     }
-    
-    public void connect() throws Exception
-    {
+
+    public void run() throws Exception {
+        connect();
+    }
+
+    public void connect() throws Exception {
         EventLoopGroup group = new NioEventLoopGroup(8);
-            Bootstrap b = new Bootstrap();
-            b.group(group)
-             .channel(NioSocketChannel.class)
-             .option(ChannelOption.TCP_NODELAY, true)
-             .handler(new ChannelInitializer<SocketChannel>() {
-                 @Override
-                 public void initChannel(SocketChannel ch) throws Exception {
-                     ch.pipeline().addLast(new LoggingHandler());
-                     ch.pipeline().addLast(new IotCarsClientHandler());
-                 }
-             });
+        Bootstrap b = new Bootstrap();
+        b.group(group)
+                .channel(NioSocketChannel.class)
+                .option(ChannelOption.TCP_NODELAY, true)
+                .handler(new ChannelInitializer<SocketChannel>() {
+                    @Override
+                    public void initChannel(SocketChannel ch) throws Exception {
+                        ch.pipeline().addLast(new LoggingHandler());
+                        ch.pipeline().addLast(new IotCarsClientHandler());
+                    }
+                });
         ChannelFuture f = null;
-        for(int i = 0; i < 8; i++)
-        {
+        for (int i = 0; i < 8; i++) {
             f = b.connect(HOST, PORT).sync();
         }
         f.channel().closeFuture().sync();
         group.shutdownGracefully();
-        }
-
-    public static void main(String[] args) throws Exception {
-        new NoThreadSecurityClient().run();
     }
 }

@@ -16,40 +16,32 @@
 package io.netty.cases.chapter05;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
-import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.*;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- *@author: wangjunchao(王俊超)
+ * @author: wangjunchao(王俊超)
  * @date: 2018-12-19 11:00:08
  */
 public class LoadRunnerClientHandler extends ChannelInboundHandlerAdapter {
 
+    static final  int     SIZE = Integer.parseInt(System.getProperty("size", "256"));
     private final ByteBuf firstMessage;
-
-    Runnable loadRunner;
-
+    Runnable   loadRunner;
     AtomicLong sendSum = new AtomicLong(0);
-
-    Runnable profileMonitor;
-
-    static final int SIZE = Integer.parseInt(System.getProperty("size", "256"));
+    Runnable   profileMonitor;
 
     /**
      * Creates a client-side handler.
      */
     public LoadRunnerClientHandler() {
         firstMessage = Unpooled.buffer(SIZE);
-        for (int i = 0; i < firstMessage.capacity(); i ++) {
+        for (int i = 0; i < firstMessage.capacity(); i++) {
             firstMessage.writeByte((byte) i);
         }
     }
@@ -66,8 +58,8 @@ public class LoadRunnerClientHandler extends ChannelInboundHandlerAdapter {
                 }
                 ByteBuf msg = null;
                 final int len = "Netty OOM Example".getBytes().length;
-                while(true)
-                {
+                while (true) {
+                    // 队列积压导致内存溢出
                     msg = Unpooled.wrappedBuffer("Netty OOM Example".getBytes());
                     ctx.writeAndFlush(msg);
                 }
@@ -77,8 +69,7 @@ public class LoadRunnerClientHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg)
-    {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ReferenceCountUtil.release(msg);
     }
 

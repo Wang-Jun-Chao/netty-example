@@ -4,7 +4,7 @@ package io.netty.cases.chapter12;
  * @author: wangjunchao(王俊超)
  * @date: 2018-12-19 11:00:08
  */
-public class UserInfoV2 implements Cloneable{
+public class UserInfoV2 implements Cloneable {
 
     private int age;
 
@@ -26,8 +26,7 @@ public class UserInfoV2 implements Cloneable{
         this.address = address;
     }
 
-    public Object clone() throws CloneNotSupportedException
-    {
+    public Object clone() throws CloneNotSupportedException {
         UserInfoV2 cloneInfo = (UserInfoV2) super.clone();
         cloneInfo.setAddress((Address) address.clone());
         return cloneInfo;

@@ -20,10 +20,11 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.logging.Logger;
 
 /**
  * @author: wangjunchao(王俊超)
@@ -31,17 +32,12 @@ import java.util.logging.Logger;
  */
 public class LoadRunnerWaterClientHandler extends ChannelInboundHandlerAdapter {
 
+    static final  int     SIZE = Integer.parseInt(System.getProperty("size", "256"));
+    static        Logger  LOG  = LoggerFactory.getLogger(LoadRunnerWaterClientHandler.class.getName());
     private final ByteBuf firstMessage;
-
     Runnable loadRunner;
-
     AtomicLong sendSum = new AtomicLong(0);
-
     Runnable profileMonitor;
-
-    static Logger LOG = Logger.getLogger(LoadRunnerWaterClientHandler.class.getName());
-
-    static final int SIZE = Integer.parseInt(System.getProperty("size", "256"));
 
     /**
      * Creates a client-side handler.
@@ -55,6 +51,10 @@ public class LoadRunnerWaterClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(final ChannelHandlerContext ctx) {
+        // 为了防止在高并发场景下，由于服务端处理慢导致客户端消息积压，除了服务端做流
+        // 控，客户端也需要做并发保护，防止自身发生消息积压。利用Netty提供的高低水位
+        // 机制，可以实现客户端更精准的流控。
+
         ctx.channel().config().setWriteBufferHighWaterMark(10 * 1024 * 1024);
         loadRunner = new Runnable() {
             @Override
@@ -64,13 +64,13 @@ public class LoadRunnerWaterClientHandler extends ChannelInboundHandlerAdapter {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                ByteBuf msg = null;
+                ByteBuf msg;
                 while (true) {
                     if (ctx.channel().isWritable()) {
                         msg = Unpooled.wrappedBuffer("Netty OOM Example".getBytes());
                         ctx.writeAndFlush(msg);
                     } else {
-                        LOG.warning("The write queue is busy : " + ctx.channel().unsafe().outboundBuffer().nioBufferSize());
+                        LOG.warn("The write queue is busy : " + ctx.channel().unsafe().outboundBuffer().nioBufferSize());
                     }
                 }
             }
