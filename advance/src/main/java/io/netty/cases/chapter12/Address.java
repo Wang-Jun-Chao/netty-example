@@ -1,7 +1,7 @@
 package io.netty.cases.chapter12;
 
 /**
- *  * @author: wangjunchao(王俊超)
+ * @author: wangjunchao(王俊超)
  * @date: 2018-12-19 11:00:08
  */
 public class Address implements Cloneable{

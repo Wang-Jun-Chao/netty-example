@@ -23,7 +23,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import java.util.concurrent.TimeUnit;
 
 /**
- *  * @author: wangjunchao(王俊超)
+ * @author: wangjunchao(王俊超)
  * @date: 2018-12-19 11:00:08
  */
 public class IotCarsClientHandler extends ChannelInboundHandlerAdapter {
