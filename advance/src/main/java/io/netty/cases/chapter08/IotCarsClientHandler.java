@@ -30,8 +30,7 @@ public class IotCarsClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        new Thread(() ->
-        {
+        new Thread(() -> {
             while (true) {
                 ByteBuf firstMessage = Unpooled.buffer(IotCarsClient.MSG_SIZE);
                 for (int i = 0; i < firstMessage.capacity(); i++) {

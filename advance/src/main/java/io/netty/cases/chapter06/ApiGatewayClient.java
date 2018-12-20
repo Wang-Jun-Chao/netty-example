@@ -30,8 +30,8 @@ import io.netty.channel.socket.nio.NioSocketChannel;
  */
 public class ApiGatewayClient {
 
-    static final String HOST     = System.getProperty("host", "127.0.0.1");
-    static final int    PORT     = Integer.parseInt(System.getProperty("port", "18086"));
+    private static final String HOST     = System.getProperty("host", "127.0.0.1");
+    private static final int    PORT     = Integer.parseInt(System.getProperty("port", "18086"));
     static final int    MSG_SIZE = 256;
 
     public static void main(String[] args) throws Exception {

@@ -52,8 +52,9 @@ public class SharableClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ByteBuf req = (ByteBuf) msg;
-        if (counter.getAndIncrement() < 10000)
+        if (counter.getAndIncrement() < 10000) {
             ctx.write(msg);
+        }
     }
 
     @Override
