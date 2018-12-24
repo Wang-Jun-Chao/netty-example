@@ -32,23 +32,34 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class IotCarsServerHandler extends ChannelInboundHandlerAdapter {
     static AtomicInteger   sum             = new AtomicInteger(0);
-    static ExecutorService executorService = new ThreadPoolExecutor(1, 3, 30, TimeUnit.SECONDS,
-            new ArrayBlockingQueue<Runnable>(1000), new ThreadPoolExecutor.CallerRunsPolicy());
 
+    // 如果后端业务逻辑处理慢，则会导致业务线程池阻塞队列积压，当积压达到容量上限
+    // 时,JDK会抛出RejectedExecutionException异常,由于业务设置了 CallerRunsPolicy 策略，
+    // 就会由调用方的线程NioEventLoop执行业务逻辑，最终导致NioEventLoop线程被阻塞，
+    // 无法读取请求消息。
+    static ExecutorService executorService = new ThreadPoolExecutor(
+            1,
+            3,
+            30,
+            TimeUnit.SECONDS,
+            new ArrayBlockingQueue<Runnable>(1000),
+            new ThreadPoolExecutor.CallerRunsPolicy());
+
+    @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         System.out.println(new Date() + "--> Server receive client message : " + sum.incrementAndGet());
-        executorService.execute(() ->
-        {
+        executorService.execute(() -> {
             ByteBuf req = (ByteBuf) msg;
-            //����ҵ���߼������������ݿ�
-            if (sum.get() % 100 == 0 || (Thread.currentThread() == ctx.channel().eventLoop()))
+            //其它业务逻辑处理，访问数据库
+            if (sum.get() % 100 == 0 || (Thread.currentThread() == ctx.channel().eventLoop())) {
                 try {
-                    //�������ݿ⣬ģ��ż�ֵ����ݿ�����ͬ������15��
+                    // 访问数据库，模拟偶现的数据库慢，同步阻塞15秒
                     TimeUnit.SECONDS.sleep(15);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            //ת����Ϣ���˴�����ʡ�ԣ�ת���ɹ�֮�󷵻���Ӧ���ն�
+            }
+            // 转发消息，此处代码省略，转发成功之后返回响应给终端
             ctx.writeAndFlush(req);
         });
     }

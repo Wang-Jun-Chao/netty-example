@@ -35,17 +35,17 @@ public class ConcurrentPerformanceServerHandler extends ChannelInboundHandlerAda
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        scheduledExecutorService.scheduleAtFixedRate(() ->
-        {
+        scheduledExecutorService.scheduleAtFixedRate(() -> {
             int qps = counter.getAndSet(0);
             System.out.println("The server QPS is : " + qps);
         }, 0, 1000, TimeUnit.MILLISECONDS);
     }
 
+    @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ((ByteBuf) msg).release();
         counter.incrementAndGet();
-        //ҵ���߼�����ģ��ҵ�����DB������ȣ�ʱ�Ӵ�100-1000����֮�䲻��
+        // 业务逻辑处理，模拟业务访问DB、缓存等，时延从100-1000毫秒之间不等
         Random random = new Random();
         try {
             TimeUnit.MILLISECONDS.sleep(random.nextInt(1000));

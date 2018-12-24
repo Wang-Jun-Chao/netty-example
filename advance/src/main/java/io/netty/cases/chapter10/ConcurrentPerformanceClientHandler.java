@@ -33,8 +33,7 @@ public class ConcurrentPerformanceClientHandler extends ChannelInboundHandlerAda
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        scheduledExecutorService.scheduleAtFixedRate(() ->
-        {
+        scheduledExecutorService.scheduleAtFixedRate(() -> {
             for (int i = 0; i < 100; i++) {
                 ByteBuf firstMessage = Unpooled.buffer(ConcurrentPerformanceClient.MSG_SIZE);
                 for (int k = 0; k < firstMessage.capacity(); k++) {

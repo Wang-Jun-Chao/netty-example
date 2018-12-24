@@ -39,19 +39,19 @@ public class ConcurrentPerformanceServerHandlerV2 extends ChannelInboundHandlerA
     static ExecutorService          executorService          = Executors.newFixedThreadPool(100);
 
     public ConcurrentPerformanceServerHandlerV2() {
-        scheduledExecutorService.scheduleAtFixedRate(() ->
-        {
+        scheduledExecutorService.scheduleAtFixedRate(() -> {
             int qps = counter.getAndSet(0);
             System.out.println("The server QPS is : " + qps);
         }, 0, 1000, TimeUnit.MILLISECONDS);
     }
 
+    @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ((ByteBuf) msg).release();
-        executorService.execute(() ->
-        {
+        // 整个链路是单线程，任务放入到线程池中执行
+        executorService.execute(() -> {
             counter.incrementAndGet();
-            //ҵ���߼�����ģ��ҵ�����DB������ȣ�ʱ�Ӵ�100-1000����֮�䲻��
+            // 业务逻辑处理，模拟业务访问DB、缓存等，时延从100-1000毫秒之间不等
             Random random = new Random();
             try {
                 TimeUnit.MILLISECONDS.sleep(random.nextInt(1000));
@@ -64,7 +64,7 @@ public class ConcurrentPerformanceServerHandlerV2 extends ChannelInboundHandlerA
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         if (evt == SslHandshakeCompletionEvent.SUCCESS) {
-            //ִ�������߼�
+            // 执行流控逻辑
         }
     }
 

@@ -28,6 +28,7 @@ public class ThreadSecurityServerHandler extends ChannelInboundHandlerAdapter {
 
     static AtomicInteger sum = new AtomicInteger(0);
 
+    @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         System.out.println("Server receive client message : " + sum.incrementAndGet());
         ctx.write(msg);
