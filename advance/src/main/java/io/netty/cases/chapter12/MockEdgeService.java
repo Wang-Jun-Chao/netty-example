@@ -19,8 +19,9 @@ public class MockEdgeService {
 
     static void testHotMethod() throws Exception {
         ByteBuf buf = Unpooled.buffer(1024);
-        for (int i = 0; i < 1024; i++)
+        for (int i = 0; i < 1024; i++) {
             buf.writeByte(i);
+        }
         RestfulReq req = new RestfulReq(buf.array());
         while (true) {
             byte[] msgReq = req.body();
@@ -30,8 +31,9 @@ public class MockEdgeService {
 
     static void testCopyHotMethod() throws Exception {
         ByteBuf buf = Unpooled.buffer(1024);
-        for (int i = 0; i < 1024; i++)
+        for (int i = 0; i < 1024; i++) {
             buf.writeByte(i);
+        }
         RestfulReq req = new RestfulReq(buf.array());
         while (true) {
             byte[] msgReq = req.body();
@@ -40,8 +42,9 @@ public class MockEdgeService {
 
     static void testReferenceHotMethod() throws Exception {
         ByteBuf buf = Unpooled.buffer(1024);
-        for (int i = 0; i < 1024; i++)
+        for (int i = 0; i < 1024; i++) {
             buf.writeByte(i);
+        }
         RestfulReqV2 req = new RestfulReqV2(buf.array());
         while (true) {
             byte[] msgReq = req.body();

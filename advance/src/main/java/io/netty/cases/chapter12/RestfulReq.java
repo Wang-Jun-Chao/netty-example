@@ -25,8 +25,9 @@ public class RestfulReq {
     }
 
     public byte[] body() {
-        if (this.body != null)
+        if (this.body != null) {
             return Arrays.copyOf(this.body, this.body.length);
+        }
         return null;
     }
 

@@ -26,6 +26,7 @@ public class UserInfoV2 implements Cloneable {
         this.address = address;
     }
 
+    @Override
     public Object clone() throws CloneNotSupportedException {
         UserInfoV2 cloneInfo = (UserInfoV2) super.clone();
         cloneInfo.setAddress((Address) address.clone());

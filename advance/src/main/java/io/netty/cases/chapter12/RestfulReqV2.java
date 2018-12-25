@@ -30,8 +30,9 @@ public class RestfulReqV2 {
     }
 
     public byte[] bodyCopy() {
-        if (this.body != null)
+        if (this.body != null) {
             return Arrays.copyOf(this.body, this.body.length);
+        }
         return null;
     }
 }
